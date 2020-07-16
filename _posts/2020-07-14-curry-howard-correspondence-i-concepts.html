@@ -1,0 +1,167 @@
+---
+layout: post
+title: 'Logic in Type Theory I: Concepts'
+date: 2020-07-14 16:25:57.000000000 +03:00
+type: post
+permalink: "/2020/07/14/curry-howard-correspondence-i-concepts/"
+---
+<p><!-- wp:heading --></p>
+<h2>Intuistionistic logic and constructivism</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The key insight of the Curry-Howard correspondence or the concept of 'propositions-as-types' is
+that there is a direct correspondence between logic and its operators and <a
+href="/2019/08/23/a-primer-on-type-theory/">type theory</a> and its
+operators.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This may at first seem strange and quite exotic (and it kind of is), but that's only because when
+one thinks of 'logic', it is most common -- by far -- to think of classical logic whereby every
+proposition (a statement which can be argued to be true or false) is assigned a truth value which
+mathematicians attempt to discover. A rather different logic is actually necessary to understand the
+Curry-Howard correspondence, namely: intuistionstic logic.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Intuistionism is the philosophical approach (in the philosophy of mathematics) whereby
+mathematical objects, including theorems and proofs are seen as human constructions instead of human
+discoveries. In other words, a <a href="https://en.wikipedia.org/wiki/Group_(mathematics)">group</a>
+for instance is a lot more like a machine made up of pieces put together than <a
+href="https://en.wikipedia.org/wiki/Newton%27s_second_law">Newton's second law of motion</a>
+discovered based on empirical evidence of such law being respected in the Universe (there is
+obviously a lot more to be said about mathematics, technology, and physics, but for a layman in
+philosophy, this should get the point across).</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In intuitionistic logic, propositions are not assigned truth values which are left to be
+'discovered' by the mathematician, instead, propositions are said to have a proof or not have one
+(yet?). Roughly speaking, if a proposition has a proof, then it's true, and if it
+<strong>cannot</strong> have one, then it's false. However, it's unhealthy to think of
+intuistionistic logic as such because the ultimate goal of it is not to determine a truth value for
+a proposition, but instead to merely construct a proof of it.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>A 'trivial' tautology has only one possible proof: that it just is a tautology, while a
+contradiction cannot have any proof at all. A slightly more elaborate proposition might have more
+than one proof. For example, proving an implication can be done by at least two ways: assuming the
+premise and deriving the conclusion, or composing other implications in a series; in general, this
+may lead us to 2 distinct proofs. This already gives more 'structure' to intuistionistic logic than
+is possible with classical logic, but more importantly, it allows for the expression of proofs as
+objects to be compiled and constructed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>The Curry-Howard correspondence</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The Curry-Howard correspondence is a reformulation of intuistionstic logic within type theory. In
+essence, a proposition is to be read as a type, and a proof is to be read as an object of that type.
+Just as we can construct the type of natural numbers (below), we can construct proofs of a
+proposition.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Nat = Zero | (Succ Nat)</code></pre>
+<p>When a proposition has a proof, we say that the type is <em>inhabited</em> (there is at
+least one element of that type). Conversely, when no proof exists for a proposition, we say that the
+type is <em>uninhabited.</em></p>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Below is a table with some basic correspondences</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:table --></p>
+<figure class="wp-block-table">
+<table>
+<tbody>
+<tr>
+<td>Logic</td>
+<td>Type Theory</td>
+</tr>
+<tr>
+<td>Proposition</td>
+<td>Type</td>
+</tr>
+<tr>
+<td>Proof</td>
+<td>Element (of a type)</td>
+</tr>
+<tr>
+<td>Tautology</td>
+<td>Type <strong>1</strong>, where <strong>* : 1</strong> is the only element</td>
+</tr>
+<tr>
+<td>Contradiction</td>
+<td>Type <strong>0</strong> with no way to form elements</td>
+</tr>
+<tr>
+<td>Deriving from premise <strong>A</strong></td>
+<td>Elimination rule <strong>A → _</strong></td>
+</tr>
+<tr>
+<td>Concluding premise <strong>A</strong></td>
+<td>Introduction rule <strong>_ → A</strong></td>
+</tr>
+</tbody>
+</table>
+<figcaption>Basic correspondences of the Curry-Howard correspondence.</figcaption>
+</figure>
+<p><!-- /wp:table --></p>
+<p><!-- wp:paragraph --></p>
+<p>Most texts on the subject never discuss much philosophy behind this or why it makes sense, so let's try to see why that is something you might like to invest yourself into.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Principally, one should realize that intuistionistic logic in type theory does not have propositions as its basic objects, but rather proofs. A proof is to be of a proposition, instead of a proposition having a proof. This also reflects a major conceptual distinction between type theory and set theory, an element <strong>is</strong> simply of a type, while a set merely <strong>contains</strong> elements with no type. Working with intuistionistic logic in type theory is about computing, combining, transforming proofs, <span style="text-decoration:underline;">not</span> propositions.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>From this perspective, a correct grouping of proof that makes sense is to consider proofs having the type of the proposition that they prove: if you can make a proof of <strong>B</strong> from some proof of <strong>A</strong>, you better be able to make one for any proof of <strong>A</strong> because if you're concluding <strong>B</strong> from <strong>A</strong>, then any proof of <strong>A</strong> should suffice. In general, anything that you can do with some proof of <strong>A</strong> must be doable with all proofs of <strong>A</strong>; therefore, it is best to say that your operations work on the <em>type of proofs of <strong>A</strong></em>. Once you realize that, you realize also that the type of proofs of <strong>A</strong> corresponds directly to the proposition <strong>A</strong> itself, and you land on the Curry-Howard correspondence.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Operators on types</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:table {"align":"center","className":""} --></p>
+<figure class="wp-block-table aligncenter">
+<table>
+<tbody>
+<tr>
+<td>Proposition</td>
+<td>Type</td>
+<td>English explanation (introduction/elimination)</td>
+</tr>
+<tr>
+<td><strong>False</strong></td>
+<td><strong>0</strong></td>
+<td>There is no way to construct an element of type <strong>0.</strong></td>
+</tr>
+<tr>
+<td><strong>True</strong></td>
+<td><strong>1</strong></td>
+<td><strong>* : 1</strong> is the only element (trivial proof) of <strong>1.</strong></td>
+</tr>
+<tr>
+<td><strong>A or B</strong></td>
+<td><strong>A + B</strong></td>
+<td>Given a proof <em>a</em> of <strong>A</strong>, (<em>Left a</em>) is a proof of <strong>A + B</strong>.<br />Given a proof <em>b</em> of <strong>B</strong>, (<em>Right b</em>) is a proof of <strong>A + B</strong>.<br />No other proofs of <strong>A + B</strong> exist, so <strong>A + B</strong> corresponds to <strong>A or B</strong>.</td>
+</tr>
+<tr>
+<td><strong>A and B</strong></td>
+<td><strong>A × B</strong></td>
+<td>If you have a proof <em>p</em> of <strong>A × B</strong>, (<em>π<sup>1</sup> p</em>) is a proof of <strong>A</strong>.<br />With that same proof <em>p</em>, (<em>π<sup>2</sup> p</em>) is a proof of <strong>B</strong>.<br />Every proof of <strong>A × B</strong> is a pair (<em>a, b</em>), <em>a</em> : <strong>A</strong>, <em>b</em> : <strong>B</strong>.</td>
+</tr>
+<tr>
+<td><strong>A implies B</strong></td>
+<td><strong>A → B</strong></td>
+<td>Given a proof <em>a</em> of <strong>A</strong>, and <em>f</em> : <strong>A → B</strong>, you can prove <strong>B</strong> with (<em>f a</em>).<br />Given <em>a</em> : <strong>A</strong> if <em>b</em>[<em>a</em>] is a term of <strong>B</strong>, then (λ <em>a</em>. b[a]) : <strong>A → B.</strong></td>
+</tr>
+<tr>
+<td><strong>not A</strong></td>
+<td><strong>A → 0</strong></td>
+<td>With a proof <em>a</em> : <strong>A</strong>, and a <em>f</em> : <strong>A → 0</strong>, (<em>f a</em>) is a contradiction<br />Given a proof of <strong>A</strong>, and a term <em>n</em>(<em>a</em>) : <strong>0</strong>, you get <strong>A → 0</strong>.</td>
+</tr>
+</tbody>
+</table>
+<figcaption>Basic operators on types and their corresponding logical operators.</figcaption>
+</figure>
+<p><!-- /wp:table --></p>
+<p><!-- wp:paragraph --></p>
+<p>The actual useful correspondences (given in the table) are quite straightforward once the reasoning above is understood. These basic bits of symmetry between operators in logic and operators in type theory give us a glimpse of what it's like to work with proofs under the Curry-Howard correspondence.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In follow-up posts we will explore the tools and consequences of this correspondence.</p>
+<p><!-- /wp:paragraph --></p>

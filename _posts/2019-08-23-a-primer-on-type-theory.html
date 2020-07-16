@@ -1,0 +1,68 @@
+---
+layout: post
+title: A short primer on type theory
+date: 2019-08-23 15:22:45.000000000 +03:00
+type: post
+permalink: "/2019/08/23/a-primer-on-type-theory/"
+---
+<p><em>Type theory</em> is a theory in mathematics that uses terms and types instead of elements and sets to formalize mathematics, meaning that all of mathematics can be built upon type theory (therefore replacing set theory in this regards; we say that type theory can act as a <a href="https://en.wikipedia.org/wiki/Foundations_of_mathematics">foundation of mathematics</a>.)</p>
+<p>Operations in type theory are formalized using another very interesting theory known as Category Theory and have interesting connections to logic via the Curry-Howard isomorphism, but these are topics for another day. Let's now give an overview of the basics of the theory.</p>
+<h2>How does it work?</h2>
+<p>Type theory builds upon the untyped lambda calculus adding in types as an extra feature. Interestingly, this apparently simple addition makes the lambda calculus a lot more interesting and powerful. Given that, understanding basic lambda calculus is a prerequisite for understanding type theory. Don't worry, I will not go into much detail here though.</p>
+<h3>Untyped lambda calculus</h3>
+<p>Lambda calculus is a rewriting system for <em>terms</em>. This means that a term t is successively converted - according to some specified rules of conversion - to other terms t1, t2, t3, etc... until conversion is no longer possible using the given rules (we say that we've reached the normal form.) Note that the reduction may not always halt (see the <a href="https://www.youtube.com/watch?v=9T8A89jgeTI">Y-Combinator</a> to learn about recursion in the lambda calculus.) <span class="c-message__body" dir="auto">However we will not consider this in depth since the introduction of types to the lambda calculus will cause all valid terms to reach a unique normal form. So throughout this document we will assume that all terms reach a unique normal form.</span></p>
+<h4>Terms</h4>
+<p>Now what exactly are terms, you may ask? A term is any syntactically correct expression. The idea is that numbers, booleans, functions, etc... are terms and certain combinations of such terms as also terms. Here are some examples of terms from common mathematics (not directly applicable to lambda calculus as you will see later:) a + 1, f(x, y), 3, f, etc...</p>
+<p>Formally, we say that this is a <a href="https://plato.stanford.edu/entries/definitions/">recursive definition</a>. These kinds of definitions are very common within computer science, so you may like to read more about them.</p>
+<p>In general, we consider <strong>atomic</strong> terms which are things like numbers, booleans and such, and compound terms, including lambda <strong>abstractions</strong> and function <strong>applications.</strong></p>
+<p><em>Lambda abstractions</em> are actually just functions. For those with previous experience in imperative programming, lambda abstractions are sometimes calles anonymous functions since they exist without needing to be named in the sense that they are different from function-like procedures in imperative programming languages. If you don't have any exposure to imperative programming, then you don't have to worry about that. Note that in the lambda calculus, functions are considered values in and of themselves and can be manipulated like any other term.</p>
+<p>As a notation, we write abstractions as such:</p>
+<pre><code>λ input . output</code></pre>
+<p>For instance, a function that increments a number may be written as such <code>λ n . n + 1</code>, and the identity function which returns its input as is can be written as <code>λ x . x</code>.</p>
+<p>Functions can be applied by simply writing their arguments to their right therefore producing an <em>application term</em>. For instance: <code>(λ x . x + 1) 2</code> is an application term that will reduce to 3.</p>
+<p>Notice, that if <code>f</code> is a function, then <code>f a</code> is an application term. This is written in a different style that is usual in mathematics and programming, where it would be written as <code>f(a)</code>.</p>
+<h4>Reduction rules</h4>
+<p>The reduction rules of lambda calculus are really simple. If your term is an abstraction or atomic, then it's normal and you can't do any reductions to it. If instead your term is an application, then you must do β-reduction (pronounced 'beta reduction') to it. This simply means that you take your argument (input) and plug it in every position it should be in within the body of the lambda expression.</p>
+<ul>
+<li>Atomic         --&gt; Done</li>
+<li>Abstraction --&gt; Done</li>
+<li>Application --&gt; β-reduction</li>
+</ul>
+<p>This <code>(λ x . x + 1) 2</code> will reduce - via β-reduction -  to <code>2 + 1</code>, so you untangle the lambda reveiling the body where every occurence of the argument variable (known as a bound variable) is replaced by its value.</p>
+<p>There are two traditions to beta reduction:</p>
+<ol>
+<li>Call-by-value: you evaluate (reduce) the argument to the function and then you apply beta reduction.</li>
+<li>Call-by-name: you do beta reduction without reducing the argument, then you reduce what you get. This leads to lazy evaluation which has many interesting properties.</li>
+</ol>
+<blockquote><h4>Example - encoding of boolean algebra:</h4>
+<pre>True  = (λ x (λ y . x))<br />False = (λ x (λ y . y))<br />And   = (λ b1 (λ b2 ((b1 b2) False)))<br />(and False False) reduces to (λ x (λ y . y)) which is False<br />(and False True ) reduces to False<br />(and True  False) reduces to False<br />(and True  True ) reduces to True</pre>
+</blockquote>
+<h3>Type theory</h3>
+<p>In type theory, each term has a <em>type</em>, and that is marked by the following <em>judgement</em>:</p>
+<pre>x : A</pre>
+<p>read as "x is of type A." Notice that this is an intrinsic property of x and not an extrinsic property (elements belonging to sets.) Although it might look syntactically nearly identical, it does imply a different, constructive view of mathematics. One never considers a term without its type. This is a very subtle difference and it may take some time for one to really see it.</p>
+<p>Given this view, we define some common operations as primitives on types that allow us to construct new types out of other types.</p>
+<h4>Product</h4>
+<p>The <em>product</em> of two types is very similar to the cartesian product of two sets in set theory and it is defined as follows:</p>
+<p>If <code> x : A</code> and <code>y : B</code>, then the pair <code>(x, y) : A x B </code>where <code>A x B</code> (generally read as 'A times B') is the product type of A with B and <code>(x, y)</code> is a single term made up of two sub-terms.</p>
+<p>This means that given two terms of types A and B, you can always construct a term of type <code>A x B</code>. Reciprocally, given a term of type <code>A x B</code>, you can always produce a term of type A and a term of type B. This is done using the two projections: π<sup>1</sup> which extracts the first element and π<sup>2</sup> which extracts the second element of a pair. Note: this π has nothing to do with the number 3.14159... and it means <span style="color:#ff0000;"><strong>p</strong></span>rojection.</p>
+<pre>For (x, y) : A x B we have<br /><br />π<sup>1</sup> (x, y) = x : A<br />π<sup>2</sup> (x, y) = y : B</pre>
+<h4>Functions</h4>
+<p>As can be seen in the part on the untyped lambda calculus, functions are also terms. A function with arguments of type A and output of type B is of type <code>A -&gt; B</code> (may be read as 'A to B'.) As such, we have the following:</p>
+<pre>(λ (x : A) . (y : B)) : A -&gt; B</pre>
+<p>There is a way to get a term of type B out of terms of type A and of type A -&gt; B. And that's done by function application.</p>
+<pre>For x : A<br />    f : A -&gt; B<br />we always have<br />    f x : B</pre>
+<p>As you can see, unlike the product, it is necessary to have two terms of the correct types to get a term of type B.</p>
+<h4>Sum</h4>
+<p>The sum type (also known as the co-product, a nomenclature reminiscent of the fact that the sum type is the dual of the product type in category theory) is the type of terms that belong to either one of two types. This may sound confusing as stated. The sum type is often called the disjoint union, or better yet, the tagged union of the types. Again, this is reminiscent of set theory. Basically, if <code>x : A</code> and <code>y : B</code> then x (tagged with its origin A) is of type <code>A + B</code> (the sum type of A and B) and so is y (tagged with its origin B.)</p>
+<p>What exactly is meant by tags, you may ask? Well, this is an example of how it's done in <a href="https://en.wikipedia.org/wiki/Haskell_(programming_language)">Haskell</a>.</p>
+<pre>data Either a b = Left a | Right b</pre>
+<p>In Haskell, <code>Either a b</code> is how you write <code>A + B</code>. You may not know Haskell, so here's a simple explanation of what's happening. We are defining the data type (for our intents, simply a type) <code>Either a b</code>. Elements of this type look like <code>Left x</code> where <code>x : a</code> or (the pipe <code>|</code>) <code>Right y</code> where <code>y : b</code>. Here <code>Left</code> and <code>Right</code> are simply wrappers around the value. They could have been named <a href="https://en.wikipedia.org/wiki/Alice_and_Bob">Alice and Bob</a> or <a href="https://en.wikipedia.org/wiki/Lambda_calculus#Origin_of_the_lambda_symbol" target="_blank" rel="noopener">Eeny and Meeny</a>, or just anything really, but Left and Right express the fact that A is written on the left side of Either and B on its right, so as not to get confused writing the type. <span style="color:#808080;">(although  A + B and B + A are technically isomorphic, they're not identical so it's essential to tell a programming language whether it's A + B or B + A.)</span></p>
+<p>Left and Right are the tags in 'tagged union.' You can now also see why it's called a disjoint union: A and B stay seperate using the tags.</p>
+<p>The sum type is a very interesting and surprisingly very useful type that has only recently got significant attention. Notice that there is no way to extract, from an arbitrary t : A + B, a value x : A or y : B, but case enumerations allow for extractions of terms of types A or B depending on the value of t. In Haskell, this is done with pattern matching as follows:</p>
+<pre>extractA           :: Either a b -&gt; Maybe a<br />extractA (Left x)  = Just x<br />extractA (Right y) = Nothing<br /><br />extractB           :: Either a b -&gt; Maybe b<br />extractB (Left x)  = Nothing<br />extractB (Right y) = Just y</pre>
+<p>Notice the use of the Maybe type here. This is because extractions can fail. The Maybe type is a wrapper around a type a, such that it can allow for no values to be returned meaning failure (Nothing).</p>
+<pre>data Maybe a = Just a | Nothing</pre>
+<p>As mentioned in <a href="https://bartoszmilewski.com/2015/01/13/simple-algebraic-data-types/" target="_blank" rel="noopener">Bartosz Milewski's article on that</a>, the Maybe type is actually a sum type itself. <code>Maybe A = A + Unit</code> where <code>Unit</code> is the type of exactly one term, which is why Maybe is sometimes known as +1. But we will not talk about that today.</p>
+<p>An interesting thing to notice is that it takes 1 term of type A x B to get a term of type A and term of type B, 2 terms of types A and A -&gt; B are necessary to get a term of type B, and no number of terms of type A + B is alone enough to get any elements of A or elements of B (meaning that you are not free to choose to retrieve an A or a B at will.)</p>
+<p>This is all there is to say in this post. Keep on looking for more posts, because very interesting posts will follow!</p>
