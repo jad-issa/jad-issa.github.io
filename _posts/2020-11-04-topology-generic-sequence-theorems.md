@@ -2,7 +2,6 @@
 layout: post
 title: "'Shape': a generalization of topological countability axioms"
 date: '2020-11-04 18:15:00 +0200'
-categories: topology, mathematics
 ---
 
 NOTE: This post needs JavaScript to show LaTeX expressions using MathsJax.
