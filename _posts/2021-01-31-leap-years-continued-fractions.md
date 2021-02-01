@@ -11,8 +11,8 @@ a day to every 4th year, resulting in an average year length of 365.25 days,
 close enough to the 'real' year for daily calendar purposes and over the span of
 anyone's lifetime. However, more elaborate systems have been introduced to
 account for a greater accuracy in this regard. In this article, I discuss a
-system based the continued fraction expansion of the length of the year, and a
-prove a small optimality theorem about it.
+system based on the continued fraction expansion of the length of the year, and
+I prove a small optimality theorem about it.
 
 
 # Tropical years, sidereal years, and the Gregorian calendar
@@ -64,7 +64,7 @@ is $$[365, 4, 7, 1, 3, 20, 1, 3, 2]$$, otherwise written as:
 
 The interpretation of $$365 + \frac 1 4$$ being "365 days and one out of 4 years
 being leap" is now clear; however, the question arises with the interpretation
-of the remaining terms. They key here is the recursive nature of continued
+of the remaining terms. The key here is the recursive nature of continued
 fractions.
 
 To consider the continued fraction up to the third term and then translate
