@@ -18,3 +18,12 @@ permalink: /works/
   Mouawad](https://www.aub.edu.lb/pages/profile.aspx?MemberId=aa368) in the Fall of
   2020.
 
+# Talks
+- Type theory as new constructive foundations for mathematics, logic, and computer science.
+  <br>
+  [Seminar of the Mathematics Department.](https://aub.edu.lb/fas/math/Pages/ags.aspx)
+  _February 11, 2021, American University of Beirut_
+  ([presentation](/assets/presentations/hott-math-seminar-aub-2021.pdf) (PDF)
+   [abstract](/assets/abstracts/hott-math-seminar-aub-2021.pdf) (PDF)
+   video recording available at the university's [website](https://aub.edu.lb/fas/math/Pages/ags.aspx))
+
